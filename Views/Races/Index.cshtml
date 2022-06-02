@@ -1,0 +1,32 @@
+﻿@model IEnumerable<Races>
+
+@{
+    ViewData["Title"] = "Liste des Courses";
+}
+
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<div class="d-flex flex-wrap">
+    @foreach (var item in Model) {
+        <div class="card m-3" style="width: 18rem;">
+          <img src="@item.Image" class="card-img-top" alt="...">
+          <div class="card-body">
+            <h5 class="card-title">@item.Title</h5>
+            <p class="card-text">@item.Description</p>
+            
+            
+            <div class="d-flex justify-content-between">
+                <div class="d-grid gap-2 d-md-flex justify-content-evenly">
+                  <a asp-action="Details" class="btn btn-primary" asp-route-id="@item.Id">Details</a>
+                  <a asp-action="Edit" class="btn btn-warning" asp-route-id="@item.Id">Edit</a>
+                </div>
+                <span class="text-muted">@item.RaceCategory</span>
+            </div>
+          </div>
+        </div>
+    }
+</div>

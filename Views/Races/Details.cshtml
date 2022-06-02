@@ -1,0 +1,25 @@
+﻿@model Races
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div class="d-flex row">
+    <img src=@Model.Image class="col-md-6 d-none d-md-block" alt=" image d'une course'" />
+    <div class="col-md-6">
+        <div class="card-body">
+            <h5 class="card-title">@Model.Title</h5>
+            <p class="card-text">@Model.Description</p>
+            <p class="text-decoration-underline">Lieu de la course :</p>
+            <ul>
+                <li>@Model.Address.Street</li>
+                <li>@Model.Address.City</li>
+                <li>@Model.Address.State</li>
+            </ul>
+            <p class="text-decoration-underline">Type de course : </p>
+            <span class="text-muted">@Model.RaceCategory</span>
+        </div>
+    </div>
+</div>

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RunWepApp_withIdentity_TeddySmith_Youtube.Models;
+using RunWepApp_withIdentity_TeddySmith_Youtube.ViewModels;
 using RunWepApp_withIdentity_TeddySmith_Youtube.Interfaces;
 
 namespace RunWepApp_withIdentity_TeddySmith_Youtube.Controllers;
@@ -7,10 +8,12 @@ namespace RunWepApp_withIdentity_TeddySmith_Youtube.Controllers;
 public class ClubsController : Controller
 {
     private readonly IClubRepository _cr;
+    private readonly IPhotoService _ps;
 
-    public ClubsController(IClubRepository clubRepository)
+    public ClubsController(IClubRepository clubRepository, IPhotoService photo)
     {
         _cr = clubRepository;
+        _ps = photo;
     }
 
     // GET: Clubs
@@ -23,7 +26,7 @@ public class ClubsController : Controller
     // GET: Clubs/Details/5
     public async Task<IActionResult> Details(int id)
     {
-        Club? club = await _cr.GetById(id);
+        Club? club = await _cr.GetByIdAsync(id);
 
         if(club is null)
         {
@@ -41,71 +44,106 @@ public class ClubsController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public IActionResult Create(Club club)
+    public async Task<IActionResult> Create(ClubViewModel clubModel)
     {
         if (ModelState.IsValid)
         {
+            var result = await _ps.AddPhotoAsync(clubModel.Image);
+            Club club = new()
+            {
+                Title = clubModel.Title,
+                Description = clubModel.Description,
+                Image = result.Url.ToString(),
+                Address = new Address
+                {
+                    City = clubModel.Address.City,
+                    Street = clubModel.Address.Street,
+                    State = clubModel.Address.State
+                }
+            };
+
             _cr.Add(club);
             return RedirectToAction("Index");
         }
-        return View(club);
+        else
+        {
+            ModelState.AddModelError("Image", "Photo upload failed");
+        }
+        return View(clubModel);
     }
 
     // GET: Clubs/Edit/5
-    /*        public async Task<IActionResult> Edit(int? id)
-            {
-                if (id == null || _context.Clubs == null)
-                {
-                    return NotFound();
-                }
+    public async Task<IActionResult> Edit(int id)
+    {
+        Club? club = await _cr.GetByIdAsync(id);
 
-                var club = await _context.Clubs.FindAsync(id);
-                if (club == null)
-                {
-                    return NotFound();
-                }
-                ViewData["AddressId"] = new SelectList(_context.Addresses, "Id", "Id", club.AddressId);
-                ViewData["AppUserId"] = new SelectList(_context.Set<AppUser>(), "Id", "Id", club.AppUserId);
-                return View(club);
-            }*/
+        if (club is null)
+        {
+            return View("Error");
+        }
+
+        ClubViewModel clubVM = new()
+        {
+            Title = club.Title,
+            Description = club.Description,
+            AddressId = club.AddressId,
+            Address = club.Address,
+            URL = club.Image,
+            ClubCategory = club.ClubCategory
+        };
+
+        return View(clubVM);
+    }
 
     // POST: Clubs/Edit/5
     // To protect from overposting attacks, enable the specific properties you want to bind to.
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-    /*        [HttpPost]
-            [ValidateAntiForgeryToken]*/
-    /*        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,Image,AddressId,ClubCategory,AppUserId")] Club club)
-            {
-                if (id != club.Id)
-                {
-                    return NotFound();
-                }
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Edit(int id, ClubViewModel clubVM)
+    {
+        if (!ModelState.IsValid)
+        {
+            ModelState.AddModelError("", "Failed to edit club");
+            return View("Edit", clubVM);
+        }
 
-                if (ModelState.IsValid)
-                {
-                    try
-                    {
-                        _context.Update(club);
-                        await _context.SaveChangesAsync();
-                    }
-                    catch (DbUpdateConcurrencyException)
-                    {
-                        if (!ClubExists(club.Id))
-                        {
-                            return NotFound();
-                        }
-                        else
-                        {
-                            throw;
-                        }
-                    }
-                    return RedirectToAction(nameof(Index));
-                }
-                ViewData["AddressId"] = new SelectList(_context.Addresses, "Id", "Id", club.AddressId);
-                ViewData["AppUserId"] = new SelectList(_context.Set<AppUser>(), "Id", "Id", club.AppUserId);
-                return View(club);
-            }
-    */
+        Club club = await _cr.GetByIdAsyncUntracked(id);
+
+        if(club is null)
+        {
+            ModelState.AddModelError("", "Failed to find club");
+            return View("Edit", clubVM);
+        }
+
+        try
+        {
+            await _ps.DeletePhotoAsync(club.Image);
+        }
+        catch (Exception ex)
+        {
+            ModelState.AddModelError("", "Could not delete photo");
+            return View(clubVM);
+        }
+
+        var newPhoto = await _ps.AddPhotoAsync(clubVM.Image);
+
+        Club editedClub = new()
+        {
+            Id = id,
+            Title = clubVM.Title,
+            Description = club.Description,
+            Image = newPhoto.Url.ToString(),
+            AddressId = clubVM.AddressId,
+            Address = clubVM.Address,
+            ClubCategory = clubVM.ClubCategory
+        };
+
+        _cr.Update(editedClub);
+
+        return RedirectToAction("Index");
+    }
+
     // GET: Clubs/Delete/5
     /*        public async Task<IActionResult> Delete(int? id)
             {

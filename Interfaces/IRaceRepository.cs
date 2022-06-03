@@ -5,7 +5,9 @@ public interface IRaceRepository
 {
     Task<IEnumerable<Races>> GetAll();
 
-    Task<Races> GetById(int id);
+    Task<Races> GetByIdAsync(int id);
+
+    Task<Races> GetByIdAsyncUntracked(int id);
 
     Task<IEnumerable<Races>> GetRacesByCity(string city);
 

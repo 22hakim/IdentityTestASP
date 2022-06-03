@@ -31,9 +31,16 @@ public class RaceRepository : IRaceRepository
         return await _db.Races.ToListAsync();
     }
 
-    public async Task<Races> GetById(int id)
+    public async Task<Races> GetByIdAsync(int id)
     {
         return await _db.Races.Include(race => race.Address)
+                              .Include(race => race.AppUser)
+                              .FirstOrDefaultAsync(i => i.Id == id);
+    }
+
+    public async Task<Races> GetByIdAsyncUntracked(int id)
+    {
+        return await _db.Races.AsNoTracking().Include(race => race.Address)
                               .Include(race => race.AppUser)
                               .FirstOrDefaultAsync(i => i.Id == id);
     }

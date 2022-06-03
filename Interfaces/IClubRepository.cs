@@ -5,8 +5,9 @@ public interface IClubRepository
 {
     Task<IEnumerable<Club>> GetAll();
 
-    Task<Club> GetById(int id);
+    Task<Club> GetByIdAsync(int id);
 
+    Task<Club> GetByIdAsyncUntracked(int id);
     Task<IEnumerable<Club>> GetClubsByCity(string city);
 
     bool Add(Club club);

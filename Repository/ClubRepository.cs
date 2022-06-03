@@ -32,12 +32,20 @@ public class ClubRepository : IClubRepository
         
     }
 
-    public async Task<Club> GetById(int id)
+    public async Task<Club> GetByIdAsync(int id)
     {
         return await _db.Clubs.Include(c => c.Address)
                               .Include(c => c.AppUser)
                               .FirstOrDefaultAsync(i => i.Id == id);
     }
+
+    public async Task<Club> GetByIdAsyncUntracked(int id)
+    {
+        return await _db.Clubs.AsNoTracking().Include(c => c.Address)
+                              .Include(c => c.AppUser)
+                              .FirstOrDefaultAsync(i => i.Id == id);
+    }
+    
 
     public async Task<IEnumerable<Club>> GetClubsByCity(string city)
     {

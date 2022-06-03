@@ -1,4 +1,4 @@
-﻿@model RunWepApp_withIdentity_TeddySmith_Youtube.Models.Club
+﻿@model RunWepApp_withIdentity_TeddySmith_Youtube.ViewModels.ClubViewModel;
 @using RunWepApp_withIdentity_TeddySmith_Youtube.Data.Enum;
 
 @{
@@ -11,7 +11,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4" >
-        <form asp-action="Create" method="post">
+        <form asp-action="Create" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Title" class="control-label"></label>
@@ -22,11 +22,6 @@
                 <label asp-for="Description" class="control-label"></label>
                 <input asp-for="Description" class="form-control" />
                 <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Image" class="control-label"></label>
-                <input asp-for="Image" class="form-control" />
-                <span asp-validation-for="Image" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="ClubCategory" class="control-label"></label>
@@ -49,6 +44,11 @@
                 <label asp-for="Address.State" class="control-label">Pays</label>
                 <input asp-for="Address.State" class="form-control" />
                 <span asp-validation-for="Address.State" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Image" class="control-label"></label>
+                <input asp-for="Image" type="file" class="form-control" />
+                <span asp-validation-for="Image" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

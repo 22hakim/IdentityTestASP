@@ -102,9 +102,9 @@ public class RacesController : Controller
             return View("Edit", raceVM);
         }
 
-        Races race = await _ir.GetByIdAsync(id);
+        Races? race = await _ir.GetByIdAsyncUntracked(id);
 
-        if(race is null)
+        if (race is null)
         {
             ModelState.AddModelError("", "Failed to find race");
             return View("Edit", raceVM);
@@ -137,5 +137,37 @@ public class RacesController : Controller
 
         return RedirectToAction("Index");
 
+    }
+
+    public async Task<IActionResult> Delete(int id)
+    {
+        Races? race = await _ir.GetByIdAsync(id);
+
+        if (race is null)
+        {
+            ErrorViewModel error = new("erreur de ouf");
+            return View("Error", error);
+        }
+
+        return View(race);
+    }
+
+    // POST: Races/Delete/5
+    [HttpPost, ActionName("Delete")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteConfirmed(Races race)
+    {
+        if (race.Id == null)
+        {
+            return Problem("Entity set 'AppDBContext.Races'  is null.");
+        }
+
+        Races Deletedrace = await _ir.GetByIdAsync(race.Id);
+
+        if (Deletedrace is not null)
+        {
+            _ir.Delete(Deletedrace);
+        }
+        return RedirectToAction("Index");
     }
 }

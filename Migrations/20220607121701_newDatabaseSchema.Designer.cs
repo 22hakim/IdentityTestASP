@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RunWepApp_withIdentity_TeddySmith_Youtube.Data;
 
@@ -11,9 +12,10 @@ using RunWepApp_withIdentity_TeddySmith_Youtube.Data;
 namespace RunWepApp_withIdentity_TeddySmith_Youtube.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    partial class AppDBContextModelSnapshot : ModelSnapshot
+    [Migration("20220607121701_newDatabaseSchema")]
+    partial class newDatabaseSchema
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -185,7 +187,7 @@ namespace RunWepApp_withIdentity_TeddySmith_Youtube.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    b.Property<int?>("AddressId")
+                    b.Property<int>("AddressId")
                         .HasColumnType("int");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -216,7 +218,7 @@ namespace RunWepApp_withIdentity_TeddySmith_Youtube.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<int?>("Pace")
+                    b.Property<int>("Pace")
                         .HasColumnType("int");
 
                     b.Property<string>("PasswordHash")
@@ -265,6 +267,7 @@ namespace RunWepApp_withIdentity_TeddySmith_Youtube.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("AppUserId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("ClubCategory")
@@ -379,7 +382,9 @@ namespace RunWepApp_withIdentity_TeddySmith_Youtube.Migrations
                 {
                     b.HasOne("RunWepApp_withIdentity_TeddySmith_Youtube.Models.Address", "Address")
                         .WithMany()
-                        .HasForeignKey("AddressId");
+                        .HasForeignKey("AddressId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Address");
                 });
@@ -394,7 +399,9 @@ namespace RunWepApp_withIdentity_TeddySmith_Youtube.Migrations
 
                     b.HasOne("RunWepApp_withIdentity_TeddySmith_Youtube.Models.AppUser", "AppUser")
                         .WithMany("Clubs")
-                        .HasForeignKey("AppUserId");
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Address");
 

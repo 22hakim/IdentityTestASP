@@ -145,44 +145,38 @@ public class ClubsController : Controller
     }
 
     // GET: Clubs/Delete/5
-    /*        public async Task<IActionResult> Delete(int? id)
-            {
-                if (id == null || _context.Clubs == null)
-                {
-                    return NotFound();
-                }
+    public async Task<IActionResult> Delete(int id)
+    {
+        Club? club = await _cr.GetByIdAsync(id);
+        
+        if(club is null)
+        {
+            ErrorViewModel error = new("erreur de ouf");
+            return View("Error", error);
+        }
 
-                var club = await _context.Clubs
-                    .Include(c => c.Address)
-                    .Include(c => c.AppUser)
-                    .FirstOrDefaultAsync(m => m.Id == id);
-                if (club == null)
-                {
-                    return NotFound();
-                }
+        return View(club);
+    }
 
-                return View(club);
-            }
-    */
     // POST: Clubs/Delete/5
-    /*        [HttpPost, ActionName("Delete")]
-            [ValidateAntiForgeryToken]*/
-    /*        public async Task<IActionResult> DeleteConfirmed(int id)
-            {
-                if (_context.Clubs == null)
-                {
-                    return Problem("Entity set 'AppDBContext.Clubs'  is null.");
-                }
-                var club = await _context.Clubs.FindAsync(id);
-                if (club != null)
-                {
-                    _context.Clubs.Remove(club);
-                }
+    [HttpPost, ActionName("Delete")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteConfirmed(Club club)
+    {
+        if (club.Id == null)
+        {
+            return Problem("Entity set 'AppDBContext.Clubs'  is null.");
+        }
 
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-    */
+        Club Deletedclub = await _cr.GetByIdAsync(club.Id);
+
+        if (Deletedclub is not null)
+        {
+            _cr.Delete(Deletedclub);
+        }
+        return RedirectToAction("Index");
+    }
+
     /*        private bool ClubExists(int id)
             {
               return (_context.Clubs?.Any(e => e.Id == id)).GetValueOrDefault();

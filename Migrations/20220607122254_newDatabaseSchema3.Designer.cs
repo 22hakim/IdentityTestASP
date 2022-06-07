@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RunWepApp_withIdentity_TeddySmith_Youtube.Data;
 
@@ -11,9 +12,10 @@ using RunWepApp_withIdentity_TeddySmith_Youtube.Data;
 namespace RunWepApp_withIdentity_TeddySmith_Youtube.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    partial class AppDBContextModelSnapshot : ModelSnapshot
+    [Migration("20220607122254_newDatabaseSchema3")]
+    partial class newDatabaseSchema3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

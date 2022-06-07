@@ -1,0 +1,40 @@
+﻿@model RunWepApp_withIdentity_TeddySmith_Youtube.ViewModels.LoginViewModel;
+@{
+    TempData["title"] = "Connection";
+}
+<h1 class="text-center">Login</h1>
+
+@if(TempData["Error"] is not null)
+{
+    <div class="row">
+        <div class="col-md-6 offset-3">
+            <p class="text-danger"> - @TempData["Error"] -</p>
+        </div>
+    </div>
+}
+
+<div class="login-page" style="text-align:center;display:flex;">
+
+
+    <form asp-action="login" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label class="control-label" asp-for="Email" ></label>
+            <input asp-for="Email" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <label class="control-label" asp-for="Password" ></label>
+            <input asp-for="Password" class="form-control" />
+        </div>
+        <div class="d-flex m-3 justify-content-between">
+            <div class="d-grid gap-2 d-md-flex justify-content-evenly">
+                <input class="btn btn-lg btn-primary" type="submit" vamue="Sign in" />                
+                <a asp-controller="Home" asp-action="Index" class="btn btn-warning" >Retour Home</a>
+            </div>    
+        </div>
+        
+
+    </form>
+
+</div>

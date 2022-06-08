@@ -157,7 +157,7 @@ public class RacesController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(Races race)
     {
-        if (race.Id == null)
+        if (race.Id == 0)
         {
             return Problem("Entity set 'AppDBContext.Races'  is null.");
         }

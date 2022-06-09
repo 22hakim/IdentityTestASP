@@ -57,7 +57,8 @@ public class RacesController : Controller
                     City = raceModel.Address.City,
                     Street = raceModel.Address.Street,
                     State = raceModel.Address.State
-                }
+                },
+                AppUserId = "41c05a46-02dc-40d0-907f-32bfe7c3434b",
             };
 
             _ir.Add(race);

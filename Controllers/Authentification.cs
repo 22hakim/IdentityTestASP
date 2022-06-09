@@ -119,16 +119,34 @@ public class Authentification : Controller
         IdentityResult newUserResponse = await _userManager.CreateAsync(newUser, rvm.Password);
 
         if (newUserResponse.Succeeded)
+        {
             await _userManager.AddToRoleAsync(newUser, UserRoles.User);
+            return RedirectToAction("Index", "Home");
+        }
 
-        return RedirectToAction("Index", "Home");
+        PutErrorListInView(newUserResponse);
+        return View(rvm);
     }
 
-    [HttpPost]
     public async Task<IActionResult> Logout()
     {
         await _signInManager.SignOutAsync();
-        return RedirectToAction("Index");
+        return RedirectToAction("Index", "Home");
+    }
+
+    public void PutErrorListInView(IdentityResult result)
+    {
+        foreach (var error in result.Errors)
+        {
+            if (error.Code.Contains("Password"))
+            {
+                ViewData["Password"] = ViewData["Password"] + error.Description;
+            }
+            else
+            {
+                ModelState.AddModelError(error.Code, error.Description);
+            }
+        }
     }
 
 }

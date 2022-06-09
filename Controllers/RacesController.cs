@@ -81,10 +81,10 @@ public class RacesController : Controller
 
         RaceViewModel raceVM = new()
         {
-            Title = race.Title,
-            Description = race.Description,
+            Title = race.Title!,
+            Description = race.Description!,
             AddressId = race.AddressId,
-            Address = race.Address,
+            Address = race.Address!,
             URL = race.Image,
             RaceCategory = race.RaceCategory
         };
@@ -114,7 +114,7 @@ public class RacesController : Controller
         {
             await _ps.DeletePhotoAsync(race.Image);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             ModelState.AddModelError("", "could not change photo");
             return View("Edit", raceVM);

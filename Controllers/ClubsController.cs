@@ -120,7 +120,7 @@ public class ClubsController : Controller
         {
             await _ps.DeletePhotoAsync(club.Image);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             ModelState.AddModelError("", "Could not delete photo");
             return View(clubVM);
@@ -163,7 +163,7 @@ public class ClubsController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(Club club)
     {
-        if (club.Id == null)
+        if (club.Id == 0)
         {
             return Problem("Entity set 'AppDBContext.Clubs'  is null.");
         }

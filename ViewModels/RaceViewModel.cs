@@ -19,5 +19,5 @@ public class RaceViewModel
     public string? URL { get; set; }
 
     public RaceCategory RaceCategory { get; set; }
-
+    public string AppUserId { get; set; }
 }

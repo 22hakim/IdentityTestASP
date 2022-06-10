@@ -2,6 +2,7 @@
 using RunWepApp_withIdentity_TeddySmith_Youtube.Models;
 using RunWepApp_withIdentity_TeddySmith_Youtube.ViewModels;
 using RunWepApp_withIdentity_TeddySmith_Youtube.Interfaces;
+using System.Security.Claims;
 
 namespace RunWepApp_withIdentity_TeddySmith_Youtube.Controllers;
 
@@ -9,11 +10,13 @@ public class ClubsController : Controller
 {
     private readonly IClubRepository _cr;
     private readonly IPhotoService _ps;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public ClubsController(IClubRepository clubRepository, IPhotoService photo)
+    public ClubsController(IClubRepository clubRepository, IPhotoService photo, IHttpContextAccessor httpContextAccessor)
     {
         _cr = clubRepository;
         _ps = photo;
+        _httpContextAccessor = httpContextAccessor;
     }
 
     // GET: Clubs
@@ -39,7 +42,11 @@ public class ClubsController : Controller
     // GET: Clubs/Create
     public IActionResult Create()
     {
-        return View();
+        string? userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+        // on peut créer un fichier claimsExtensions et passer grace au this de la methode notre user 
+        //var user2 = _httpContextAccessor.HttpContext.User.GetUserId();
+        ClubViewModel clubViewModel = new ClubViewModel { AppUserId = userId };
+        return View(clubViewModel);
     }
 
     [HttpPost]
@@ -54,6 +61,7 @@ public class ClubsController : Controller
                 Title = clubModel.Title,
                 Description = clubModel.Description,
                 Image = result.Url.ToString(),
+                AppUserId = clubModel.AppUserId,
                 Address = new Address
                 {
                     City = clubModel.Address.City,

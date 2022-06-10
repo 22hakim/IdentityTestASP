@@ -20,4 +20,5 @@ public class ClubViewModel
     public string? URL { get; set; }
 
     public ClubCategory ClubCategory { get; set; }
+    public string AppUserId { get; set; }
 }

@@ -2,6 +2,7 @@
 using RunWepApp_withIdentity_TeddySmith_Youtube.Interfaces;
 using RunWepApp_withIdentity_TeddySmith_Youtube.Models;
 using RunWepApp_withIdentity_TeddySmith_Youtube.ViewModels;
+using System.Security.Claims;
 
 namespace RunWepApp_withIdentity_TeddySmith_Youtube.Controllers;
 
@@ -9,11 +10,13 @@ public class RacesController : Controller
 {
     private readonly IRaceRepository _ir;
     private readonly IPhotoService _ps;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public RacesController(IRaceRepository raceRepository, IPhotoService photoService)
+    public RacesController(IRaceRepository raceRepository, IPhotoService photoService, IHttpContextAccessor httpContextAccessor)
     {
         _ir = raceRepository;
         _ps = photoService;
+        _httpContextAccessor = httpContextAccessor;
     }
     public async Task<IActionResult>  Index()
     {
@@ -37,7 +40,9 @@ public class RacesController : Controller
     // GET: Races/Create
     public IActionResult Create()
     {
-        return View();
+        string? userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+        RaceViewModel raceViewModel = new() { AppUserId = userId };
+        return View(raceViewModel);
     }
 
     [HttpPost]
@@ -52,13 +57,13 @@ public class RacesController : Controller
                 Title = raceModel.Title,
                 Description = raceModel.Description,
                 Image = result.Url.ToString(),
+                AppUserId = raceModel.AppUserId,
                 Address = new Address
                 {
                     City = raceModel.Address.City,
                     Street = raceModel.Address.Street,
                     State = raceModel.Address.State
                 },
-                AppUserId = "41c05a46-02dc-40d0-907f-32bfe7c3434b",
             };
 
             _ir.Add(race);

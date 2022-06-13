@@ -17,8 +17,8 @@ public class DashboardRepository : IDashboardRepository
     }
     public async  Task<List<Club>> GetAllClubs()
     {
-        var curUser = _httpContextAccessor.HttpContext?.User.GetUserId();
-        var userClubs = _context.Clubs.Where(u => u.AppUserId == curUser);
+        string? curUser = _httpContextAccessor.HttpContext?.User.GetUserId();
+        IEnumerable<Club> userClubs = _context.Clubs.Where(u => u.AppUserId == curUser);
         return userClubs.ToList();
     }
 
@@ -27,5 +27,10 @@ public class DashboardRepository : IDashboardRepository
         var curUser = _httpContextAccessor.HttpContext?.User.GetUserId();
         var userRaces = _context.Races.Where(u => u.AppUserId == curUser);
         return userRaces.ToList();
+    }
+
+    public async Task<AppUser> GetAppUserByIs(string id)
+    {
+        return await _context.Users.FindAsync(id);
     }
 }

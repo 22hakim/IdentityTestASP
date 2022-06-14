@@ -24,7 +24,11 @@ public class UserController : Controller
                 Id = user.Id,
                 UserName = user.UserName,
                 Pace = user.Pace,
-                Mileage = user.Mileage
+                Mileage = user.Mileage,
+                State = user.State,
+                Street = user.Street,
+                City = user.City,
+                ProfileImageUrl = user.ProfileImageUrl
             };
             listUsers.Add(uvm);
         }
@@ -39,7 +43,11 @@ public class UserController : Controller
             Id = user.Id,
             UserName = user.UserName,
             Pace = user.Pace,
-            Mileage = user.Mileage
+            Mileage = user.Mileage,
+            State = user.State,
+            Street = user.Street,
+            City = user.City,
+            ProfileImageUrl = user.ProfileImageUrl
         };
 
         return View(uvm);

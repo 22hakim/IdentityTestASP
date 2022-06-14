@@ -2,9 +2,9 @@
 
 public class UserViewModel
 {
-    public string Id { get; set; }
+    public string? Id { get; set; }
 
-    public string UserName { get; set; }
+    public string? UserName { get; set; }
 
     public int? Pace { get; set; }
 
@@ -12,10 +12,11 @@ public class UserViewModel
 
     public string? ProfileImageUrl { get; set; }
 
+    public string? Street { get; set; }
     public string? City { get; set; }
 
     public string? State { get; set; }
 
-    public IFormFile Image { get; set; }
+    public IFormFile? Image { get; set; }
     
 }

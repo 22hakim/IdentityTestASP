@@ -35,6 +35,11 @@ public class UserRepository : IUserRepository
         return await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
     }
 
+    public async Task<AppUser> GetByIdAsyncUntracked(string id)
+    {
+        return await _context.Users.AsNoTracking().FirstOrDefaultAsync(i => i.Id == id);
+    }
+
     public bool Save()
     {
         var saved = _context.SaveChanges();

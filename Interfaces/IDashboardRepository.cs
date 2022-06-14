@@ -7,5 +7,5 @@ public interface IDashboardRepository
     Task<List<Club>> GetAllClubs();
     Task<List<Races>> GetUserRaces();
 
-    Task<AppUser> GetAppUserByIs(string id);
+    Task<AppUser> GetAppUserById(string id);
 }

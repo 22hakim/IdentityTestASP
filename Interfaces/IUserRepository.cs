@@ -8,6 +8,8 @@ public interface IUserRepository
 
     Task<AppUser> GetUserById(string id);
 
+    Task<AppUser> GetByIdAsyncUntracked(string id);
+
     bool Add(AppUser user);
 
     bool Update(AppUser user);
